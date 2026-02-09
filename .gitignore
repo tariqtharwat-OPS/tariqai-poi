@@ -6,21 +6,24 @@
 !/src/poi/
 !/src/poi/**
 
-!/tests/
-!/tests/smoke/
-!/tests/smoke/**
-!/tests/real/
-!/tests/real/**
+!/src/tests/
+!/src/tests/**
 
 !/persistent_memory/
 !/persistent_memory/poi/
 !/persistent_memory/poi/audit_trail.log
 
-# Allow root governance files
+# Allow root governance and documentation files
 !/TARIQ_AI_CONSTITUTION.md
 !/INTELLIGENCE_CORE_SPEC.md
 !/SYSTEM_BOUNDARIES.md
 !/README.md
+!/REALITY_CHECK_REPORT.md
+!/TECH_STACK_REVIEW.md
+!/EXECUTION_SAFETY_AUDIT.md
+!/KNOWN_ISSUES.md
+!/REPRODUCIBILITY.md
+!/requirements.txt
 !/.gitignore
 
 # Exclude python clutter even in whitelisted folders

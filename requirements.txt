@@ -1,0 +1,10 @@
+# Tariq AI POI Core Dependencies
+pytest>=7.0.0
+# Core logic uses standard Python 3.12+ libraries:
+# - pathlib
+# - json
+# - logging
+# - uuid
+# - unittest
+# - shutil
+# - datetime
