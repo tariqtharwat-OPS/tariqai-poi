@@ -57,22 +57,42 @@ class ConfirmationManager:
         return "Standard system interaction."
 
     def _display_request(self, req: ConfirmationRequest):
-        print("\n" + "!" * 60)
-        print("🚨 TARIQ AI : CONFIRMATION REQUIRED")
-        print("!" * 60)
-        print(f"ID: {req.request_id}")
-        print(f"INTENT: {req.intent_type}")
-        print(f"CONTEXT: {req.context_signature}")
-        print(f"RISK: {req.risk_level}")
-        print(f"ACTION: {req.action}")
-        print(f"CONSEQUENCE: {req.consequence_summary}")
-        print("-" * 60)
-        print("OPTIONS:")
-        print(" [1] Approve Once")
-        print(" [2] Approve ALWAYS for this context")
-        print(" [3] Reject")
-        print(" [4] Revoke prior trust for this context")
-        print("-" * 60)
+        print("\n" + "╔" + "═" * 78 + "╗")
+        print(f"║ 🛡️  TARIQ AI : HUMAN OVERSIGHT REQUIRED {' ' * (37 - len(req.request_id))} {req.request_id} ║")
+        print("╠" + "═" * 78 + "╣")
+        print(f"║  INTENT      : {req.intent_type:<63} ║")
+        print(f"║  CONTEXT SIG : {req.context_signature:<63} ║")
+        print(f"║  RISK LEVEL  : {req.risk_level:<63} ║")
+        print(f"║  TARGET      : {req.action:<63} ║")
+        print("╟" + "─" * 78 + "╢")
+        print(f"║  CONSEQUENCE SUMMARY:                                                       ║")
+        summary_lines = self._wrap_text(req.consequence_summary, 74)
+        for line in summary_lines:
+            print(f"║  {line:<76} ║")
+        print("╚" + "═" * 78 + "╝")
+        print("\nDECISION OPTIONS:")
+        print(" [1] APPROVE ONCE   - Proceed with this single operation.")
+        print(" [2] APPROVE ALWAYS - Authorize this specific context for future ACT status.")
+        print(" [3] REJECT         - Halt all operations for this intent.")
+        print(" [4] REVOKE TRUST   - Demote this context immediately to ASK state.")
+        print("-" * 80)
+
+    def _wrap_text(self, text, width):
+        words = text.split()
+        lines = []
+        current_line = []
+        current_length = 0
+        for word in words:
+            if current_length + len(word) + 1 <= width:
+                current_line.append(word)
+                current_length += len(word) + 1
+            else:
+                lines.append(" ".join(current_line))
+                current_line = [word]
+                current_length = len(word)
+        if current_line:
+            lines.append(" ".join(current_line))
+        return lines
 
     def _get_user_input(self) -> DecisionType:
         # In a real GUI this would be a button click. 

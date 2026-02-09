@@ -17,6 +17,7 @@ class IdentityMemoryLayer:
         self.memory_file = self.base_path / "action_memory.json"
         self.trust_registry = self.base_path / "trust_escalation.json"
         self.audit_log = self.base_path / "audit_trail.log"
+        self.decision_history_file = self.base_path / "decision_history.json"
         
         self._init_files()
         self._setup_logging()
@@ -26,6 +27,8 @@ class IdentityMemoryLayer:
             self.memory_file.write_text(json.dumps([]))
         if not self.trust_registry.exists():
             self.trust_registry.write_text(json.dumps({}))
+        if not self.decision_history_file.exists():
+            self.decision_history_file.write_text(json.dumps([]))
 
     def _setup_logging(self):
         self.logger = logging.getLogger("IML_Audit")
@@ -115,6 +118,39 @@ class IdentityMemoryLayer:
             "trusted_contexts_act": [k for k, v in trust.items() if v["state"] == "ACT"],
             "pending_contexts_ask": [k for k, v in trust.items() if v["state"] == "ASK" and v.get("actions_confirmed", 0) > 0],
             "revoked_contexts": [k for k, v in trust.items() if v.get("revoked")]
+        }
+
+    def log_human_decision(self, request_id, decision_type, context):
+        """Records a human decision in the audit trail."""
+        with open(self.decision_history_file, 'r') as f:
+            history = json.load(f)
+        
+        # Ensure decision is serializable (handle Enum)
+        decision_val = decision_type.value if hasattr(decision_type, 'value') else str(decision_type)
+        
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "request_id": request_id,
+            "decision": decision_val,
+            "context": context
+        }
+        history.append(entry)
+        
+        with open(self.decision_history_file, 'w') as f:
+            json.dump(history, f, indent=4)
+        
+        self.logger.info(f"HUMAN_DECISION | {request_id} | {decision_val} | Context: {context.get('context_signature')}")
+
+    def get_full_audit_history(self):
+        """Returns the full list of intents and decisions."""
+        with open(self.memory_file, 'r') as f:
+            intents = json.load(f)
+        with open(self.decision_history_file, 'r') as f:
+            decisions = json.load(f)
+        
+        return {
+            "intents": intents,
+            "decisions": decisions
         }
 
     def record_outcome(self, action_id, result):

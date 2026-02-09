@@ -78,6 +78,9 @@ class POICore:
                     params=step.get("params", {})
                 )
                 
+                # LOG DECISION TO IML (Phase 6)
+                self.iml.log_human_decision(user_decision.request_id, user_decision.decision, context)
+                
                 if user_decision.decision in [DecisionType.APPROVE_ONCE, DecisionType.APPROVE_ALWAYS]:
                     print(f"[USER] Action approved ({user_decision.decision.value}). Re-executing...")
                     
