@@ -125,8 +125,23 @@ class POICore:
 logger = logging.getLogger("POI_Global")
 if __name__ == "__main__":
     core = POICore()
-    # Demo 1: Simple status check (Will likely be ASK first)
-    core.handle_request("Show me your status")
+    print("="*80)
+    print("🛡️  TARIQ AI POI - INTERACTIVE ASSISTANT")
+    print("="*80)
+    print("Type 'exit' to quit.")
     
-    # Demo 2: File creation (Will be BLOCKED by trust count)
-    core.handle_request("Create a new checkpoint file")
+    while True:
+        try:
+            prompt = input("\n[USER] > ").strip()
+            if prompt.lower() in ["exit", "quit"]:
+                break
+            if not prompt:
+                continue
+                
+            core.handle_request(prompt)
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+    
+    print("\nShutting down Tariq AI POI...")

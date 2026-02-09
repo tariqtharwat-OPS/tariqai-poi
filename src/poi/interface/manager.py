@@ -51,9 +51,15 @@ class ConfirmationManager:
         if action == "press_button":
             return f"Will interact with UI element: {params.get('label', 'Unknown')}"
             
-        if action == "file_op":
-            return f"Will modify file at: {params.get('path')}"
-            
+        if action == "word_create":
+            return f"Will GENERATE a Word document at: {params.get('path')}"
+
+        if action == "excel_create":
+            return f"Will GENERATE an Excel spreadsheet at: {params.get('path')}"
+
+        if action == "browser_open":
+            return f"Will OPEN browser and navigate to: {params.get('url')}"
+
         return "Standard system interaction."
 
     def _display_request(self, req: ConfirmationRequest):

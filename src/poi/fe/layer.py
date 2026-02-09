@@ -1,4 +1,6 @@
 import logging
+import os
+import shutil
 from pathlib import Path
 
 class FastExecutor:
@@ -6,18 +8,27 @@ class FastExecutor:
     Execution Layer. Core responsibilities:
     1. Executing atomic steps.
     2. Mandatory IML confirmation before every system interaction.
+    3. DRY_RUN enforcement.
     """
     def __init__(self, iml):
         self.iml = iml
         self.logger = logging.getLogger("FE_Layer")
+        self.dry_run = os.environ.get("DRY_RUN") == "1"
 
     def execute_step(self, step_data, context):
         """
         Takes a single task step and executes it ONLY IF IML approves.
+        Honors DRY_RUN environment variable.
         """
         action = step_data.get("action")
         params = step_data.get("params", {})
         
+        # 0. DRY_RUN ENFORCEMENT
+        is_write_action = action in ["file_op", "file_create", "file_move", "file_copy", "file_delete", "word_create", "excel_create"]
+        if self.dry_run and is_write_action:
+            self.logger.info(f"DRY_RUN | Action '{action}' planned but NOT executed.")
+            return {"status": "SUCCESS", "message": f"[DRY_RUN] Would have executed: {action}", "dry_run": True}
+
         if context.get("bypass_governance"):
             self.logger.info(f"BYPASS | Action '{action}' authorized by HUMAN.")
             allowed, reason, suggested_state = True, "User authorized bypass", "ACT"
@@ -74,7 +85,6 @@ class FastExecutor:
                 return {"status": "ERROR", "message": f"Source does not exist: {src}"}
 
             if action == "file_copy":
-                import shutil
                 src, dst = Path(params.get("src")), Path(params.get("dst"))
                 if src.exists():
                     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -88,10 +98,49 @@ class FastExecutor:
                     if p.is_file():
                         p.unlink()
                     else:
-                        import shutil
                         shutil.rmtree(p)
                     return {"status": "SUCCESS", "message": f"Deleted: {p}"}
                 return {"status": "ERROR", "message": f"Path does not exist: {p}"}
+
+            # --- NEW PHASE 7 PRIMITIVES: Word & Excel ---
+            if action == "word_create":
+                from docx import Document
+                p = Path(params.get("path"))
+                p.parent.mkdir(parents=True, exist_ok=True)
+                doc = Document()
+                doc.add_heading(params.get("title", "Tariq AI Document"), 0)
+                for bullet in params.get("bullets", []):
+                    doc.add_paragraph(bullet, style='List Bullet')
+                doc.save(p)
+                return {"status": "SUCCESS", "message": f"Created Word doc: {p}"}
+
+            if action == "excel_create":
+                from openpyxl import Workbook
+                p = Path(params.get("path"))
+                p.parent.mkdir(parents=True, exist_ok=True)
+                wb = Workbook()
+                ws = wb.active
+                ws.title = params.get("sheet_name", "TariqData")
+                data = params.get("data", [["Header1", "Header2"]])
+                for row in data:
+                    ws.append(row)
+                wb.save(p)
+                return {"status": "SUCCESS", "message": f"Created Excel sheet: {p}"}
+
+            # --- NEW PHASE 7 PRIMITIVES: Browser ---
+            if action == "browser_open":
+                # In real execution, this would start a Playwright session
+                # For this adapter, we will use sync playwright
+                from playwright.sync_api import sync_playwright
+                with sync_playwright() as pw:
+                    browser = pw.chromium.launch(headless=True)
+                    page = browser.new_page()
+                    page.goto(params.get("url"))
+                    # Extraction logic (simplified for demo)
+                    title = page.title()
+                    content = page.content() if params.get("extract_content") else "Content skipped"
+                    browser.close()
+                    return {"status": "SUCCESS", "message": f"Opened {params.get('url')}", "data": {"title": title, "content": content}}
 
             if action == "press_button":
                 # Phase 3 Controlled Execution
@@ -99,8 +148,6 @@ class FastExecutor:
                 location = params.get("location")
                 label = params.get("label")
                 
-                # In real scenario, this calls robotic/UI automation driver (browser/AHK)
-                # Here we perform a SAFE simulation for Phase 3.
                 print(f"[POI_FE] SEMANTIC_ACTION: Pressing '{label}' (ID: {entity_id}) at {location}")
                 return {
                     "status": "SUCCESS", 

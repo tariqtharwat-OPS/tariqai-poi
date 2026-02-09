@@ -62,6 +62,13 @@ class StrategicThinker:
 
     def _classify_intent(self, prompt):
         p = prompt.lower()
+        if any(w in p for w in ["browser", "search", "open page", "visit", "website"]):
+            return "BROWSER"
+        if any(w in p for w in ["excel", "xlsx", "spreadsheet", "table"]):
+            return "DOCUMENT_EXCEL"
+        if any(w in p for w in ["word", "docx", "document", "report"]):
+            return "DOCUMENT_WORD"
+            
         if any(w in p for w in ["list", "look inside", "show files", "find", "locate"]):
             return "FILE_NAVIGATION"
         if any(w in p for w in ["rename", "move", "copy", "create", "make folder", "setup"]):
@@ -80,6 +87,10 @@ class StrategicThinker:
         if any(w in p for w in ["delete", "remove", "wipe", "overwrite", "erase"]):
             return "CRITICAL"
         
+        # Browser and new document creation are MEDIUM
+        if any(w in p for w in ["browser", "excel", "xlsx", "word", "docx"]):
+            return "MEDIUM"
+
         # Modification of existing files/folders
         if any(w in p for w in ["rename", "move", "copy"]):
             return "MEDIUM"
@@ -92,11 +103,30 @@ class StrategicThinker:
 
     def _generate_plan(self, prompt, intent_type, perception_model=None):
         """
-        Phase 3: Intent -> Semantic Entity -> FE Action mapping.
-        Decomposes intent into actionable steps based on environment context.
+        Phase 7: Intent -> FE Action mapping for Browser/Docs.
         """
-        # 1. Check for Semantic Execution Intent (e.g., "Press Save", "Click explorer")
         p = prompt.lower()
+        
+        if intent_type == "BROWSER":
+            url = self._extract_url(prompt) or "https://www.google.com"
+            return [{"action": "browser_open", "params": {"url": url, "extract_content": True}}]
+
+        if intent_type == "DOCUMENT_WORD":
+            path = self._extract_path(prompt) or "D:/TariqAI/logs/new_report.docx"
+            return [{"action": "word_create", "params": {
+                "path": path, 
+                "title": "Tariq AI Automated Report",
+                "bullets": self._extract_bullets(prompt) or ["Automatic analysis start"]
+            }}]
+
+        if intent_type == "DOCUMENT_EXCEL":
+            path = self._extract_path(prompt) or "D:/TariqAI/logs/data_sheet.xlsx"
+            return [{"action": "excel_create", "params": {
+                "path": path,
+                "sheet_name": "TariqData",
+                "data": [["Timestamp", "Event"], ["2026-02-10", "Phase 7 Initialization"]]
+            }}]
+
         if perception_model and ("click" in p or "press" in p or "save" in p):
             # Attempt to find a matching entity semantically
             for entity in perception_model.entities:
@@ -138,15 +168,16 @@ class StrategicThinker:
         if intent_type == "READ_ONLY_STATUS":
             return [{"action": "log", "params": {"message": f"POI Audit: Check status of {prompt}"}}]
         
-        if intent_type == "DATA_MODIFICATION" or intent_type == "FILE_OPERATION":
-            # Catch-all for basic file operations if specific logic missed it
-            path = self._extract_path(prompt) or "logs/poi_checkpoint.txt"
-            return [
-                {"action": "file_op", "params": {"path": path, "content": f"POI Activity: {prompt}"}},
-                {"action": "log", "params": {"message": f"State modified by POI Core: {path}"}}
-            ]
-            
         return [{"action": "chat", "params": {"message": f"I understand your request for {prompt}. How should I proceed?"}}]
+
+    def _extract_url(self, prompt):
+        import re
+        urls = re.findall(r'https?://[^\s]+', prompt)
+        return urls[0] if urls else None
+
+    def _extract_bullets(self, prompt):
+        # Extremely simplified for demo
+        return ["Data point extracted from prompt"]
 
     def _extract_path(self, prompt):
         """Simple path extractor for Phase 5."""
