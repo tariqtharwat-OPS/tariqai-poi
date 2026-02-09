@@ -1,0 +1,34 @@
+# Ignore everything
+*
+
+# Allow directories themselves (must be done recursively)
+!/src/
+!/src/poi/
+!/src/poi/**
+
+!/tests/
+!/tests/smoke/
+!/tests/smoke/**
+!/tests/real/
+!/tests/real/**
+
+!/persistent_memory/
+!/persistent_memory/poi/
+!/persistent_memory/poi/audit_trail.log
+
+# Allow root governance files
+!/TARIQ_AI_CONSTITUTION.md
+!/INTELLIGENCE_CORE_SPEC.md
+!/SYSTEM_BOUNDARIES.md
+!/README.md
+!/.gitignore
+
+# Exclude python clutter even in whitelisted folders
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.venv/
+.env
+.pytest_cache/
+*.log

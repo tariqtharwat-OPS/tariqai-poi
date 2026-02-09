@@ -1,0 +1,19 @@
+2026-02-09 18:20:47,922 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-09 18:20:47,923 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-09 18:20:47,935 | POI_AUDIT | INFO | INTENT_RECEIVED | 0affa896 | {"intent_id": "0affa896", "intent_type": "FILE_NAVIGATION", "risk_level": "LOW", "context_signature": "d1dcf62a6cdb", "plan": [{"action": "file_list", "params": {"path": "D:/TariqAI/logs"}}]}
+2026-02-09 18:20:47,937 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-09 18:20:47,938 | POI_AUDIT | INFO | INTENT_RECEIVED | 6fdebc80 | {"intent_id": "6fdebc80", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "30dd9fac2150", "plan": [{"action": "file_create", "params": {"path": "D:/TariqAI/logs/smoke_test.txt"}}]}
+2026-02-09 18:20:47,938 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | FILE_OPERATION::30dd9fac2150 | 0/5
+2026-02-09 18:20:48,249 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-09 18:20:48,259 | POI_AUDIT | INFO | INTENT_RECEIVED | 4c9fde37 | {"intent_id": "4c9fde37", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "08eac982038f", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_real_ph5\\governed_file.txt"}}]}
+2026-02-09 18:20:48,278 | POI_AUDIT | INFO | ACTION_COMPLETED | 4c9fde37 | Status: COMPLETED
+2026-02-09 18:20:48,282 | POI_AUDIT | INFO | INTENT_RECEIVED | 21b6406c | {"intent_id": "21b6406c", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "08eac982038f", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_real_ph5\\governed_file.txt"}}]}
+2026-02-09 18:20:48,299 | POI_AUDIT | INFO | ACTION_COMPLETED | 21b6406c | Status: COMPLETED
+2026-02-09 18:20:48,301 | POI_AUDIT | INFO | INTENT_RECEIVED | 02c494e6 | {"intent_id": "02c494e6", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "08eac982038f", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_real_ph5\\governed_file.txt"}}]}
+2026-02-09 18:20:48,319 | POI_AUDIT | INFO | ACTION_COMPLETED | 02c494e6 | Status: COMPLETED
+2026-02-09 18:20:48,322 | POI_AUDIT | INFO | INTENT_RECEIVED | 52cfe88c | {"intent_id": "52cfe88c", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "08eac982038f", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_real_ph5\\governed_file.txt"}}]}
+2026-02-09 18:20:48,338 | POI_AUDIT | INFO | ACTION_COMPLETED | 52cfe88c | Status: COMPLETED
+2026-02-09 18:20:48,347 | POI_AUDIT | INFO | INTENT_RECEIVED | 14de5c15 | {"intent_id": "14de5c15", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "08eac982038f", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_real_ph5\\governed_file.txt"}}]}
+2026-02-09 18:20:48,367 | POI_AUDIT | INFO | ACTION_COMPLETED | 14de5c15 | Status: COMPLETED
+2026-02-09 18:20:48,370 | POI_AUDIT | INFO | INTENT_RECEIVED | 404379f8 | {"intent_id": "404379f8", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "08eac982038f", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_real_ph5\\governed_file.txt"}}]}
+2026-02-09 18:20:48,392 | POI_AUDIT | INFO | ACTION_COMPLETED | 404379f8 | Status: COMPLETED
