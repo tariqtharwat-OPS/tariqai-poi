@@ -109,7 +109,12 @@ class StrategicThinker:
         
         if intent_type == "BROWSER":
             url = self._extract_url(prompt) or "https://www.google.com"
-            return [{"action": "browser_open", "params": {"url": url, "extract_content": True}}]
+            params = {"url": url, "extract_content": True}
+            if "save" in p or "to" in p:
+                path = self._extract_path(prompt, skip_urls=True)
+                if path:
+                    params["save_path"] = path
+            return [{"action": "browser_open", "params": params}]
 
         if intent_type == "DOCUMENT_WORD":
             path = self._extract_path(prompt) or "D:/TariqAI/logs/new_report.docx"
@@ -179,12 +184,15 @@ class StrategicThinker:
         # Extremely simplified for demo
         return ["Data point extracted from prompt"]
 
-    def _extract_path(self, prompt):
+    def _extract_path(self, prompt, skip_urls=False):
         """Simple path extractor for Phase 5."""
         words = prompt.split()
         for word in words:
-            if "." in word or "/" in word or "\\" in word or word.startswith("logs"):
-                return word.strip("'\"")
+            clean_word = word.strip("'\"")
+            if skip_urls and (clean_word.startswith("http://") or clean_word.startswith("https://")):
+                continue
+            if "." in clean_word or "/" in clean_word or "\\" in clean_word or clean_word.startswith("logs"):
+                return clean_word
         return None
 
     def _extract_paths(self, prompt):

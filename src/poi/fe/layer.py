@@ -129,18 +129,26 @@ class FastExecutor:
 
             # --- NEW PHASE 7 PRIMITIVES: Browser ---
             if action == "browser_open":
-                # In real execution, this would start a Playwright session
-                # For this adapter, we will use sync playwright
                 from playwright.sync_api import sync_playwright
+                url = params.get("url")
+                save_path = params.get("save_path")
+                
                 with sync_playwright() as pw:
                     browser = pw.chromium.launch(headless=True)
                     page = browser.new_page()
-                    page.goto(params.get("url"))
-                    # Extraction logic (simplified for demo)
+                    page.goto(url)
                     title = page.title()
-                    content = page.content() if params.get("extract_content") else "Content skipped"
+                    content = page.content() if params.get("extract_content") else ""
                     browser.close()
-                    return {"status": "SUCCESS", "message": f"Opened {params.get('url')}", "data": {"title": title, "content": content}}
+                    
+                    if save_path:
+                        p = Path(save_path)
+                        p.parent.mkdir(parents=True, exist_ok=True)
+                        with open(p, "w", encoding="utf-8") as f:
+                            f.write(content)
+                        self.logger.info(f"BROWSER | Content saved to {save_path}")
+                        
+                    return {"status": "SUCCESS", "message": f"Opened {url}", "data": {"title": title, "content_len": len(content)}}
 
             if action == "press_button":
                 # Phase 3 Controlled Execution
