@@ -66,17 +66,22 @@ class GUIConfirmationManager(ConfirmationManager):
 
 class EngineSignals(QObject):
     request_oversight_signal = Signal(object)
+    status_signal = Signal(str)
     result_signal = Signal(object)
 
 class EngineThread(QThread):
-    def __init__(self, core, task):
+    def __init__(self, core, task, signals):
         super().__init__()
         self.core = core
         self.task = task
+        self.signals = signals
+        # Bridge the core callback to QT signals
+        self.core.status_callback = lambda msg: self.signals.status_signal.emit(msg)
 
     def run(self):
         res = self.core.handle_request(self.task)
-        # result_signal.emit(res) - not strictly needed for this simple demo but good practice
+        self.signals.status_signal.emit("Ready")
+        # self.signals.result_signal.emit(res)
 
 class TariqMainWindow(QMainWindow):
     def __init__(self):
@@ -100,6 +105,13 @@ class TariqMainWindow(QMainWindow):
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
+
+        # Progress / Status Bar (New in Phase 9.2)
+        status_layout = QHBoxLayout()
+        self.progress_label = QLabel("Status: Ready")
+        self.progress_label.setStyleSheet("font-weight: bold; color: #007acc;")
+        status_layout.addWidget(self.progress_label)
+        main_layout.addLayout(status_layout)
 
         # Top Splitter: Transcript and Audit
         splitter = QSplitter(Qt.Horizontal)
@@ -171,6 +183,7 @@ class TariqMainWindow(QMainWindow):
         logging.getLogger().addHandler(self.log_emitter)
 
     def _connect_signals(self):
+        self.engine_signals.status_signal.connect(self.progress_label.setText)
         self.engine_signals.request_oversight_signal.connect(self.show_oversight)
         self.btn_once.clicked.connect(lambda: self.resolve_oversight(DecisionType.APPROVE_ONCE))
         self.btn_always.clicked.connect(lambda: self.resolve_oversight(DecisionType.APPROVE_ALWAYS))
@@ -193,7 +206,7 @@ class TariqMainWindow(QMainWindow):
         self.input_field.clear()
         
         # Run in thread
-        self.thread = EngineThread(self.core, task)
+        self.thread = EngineThread(self.core, task, self.engine_signals)
         self.thread.start()
 
     def show_oversight(self, req: ConfirmationRequest):

@@ -38,7 +38,9 @@ class FastExecutor:
             allowed, reason, suggested_state = self.iml.validate_action(
                 intent_type=context.get("intent_type"),
                 context_signature=context.get("context_signature"),
-                risk_level=context.get("risk_level")
+                risk_level=context.get("risk_level"),
+                action=action,
+                params=params
             )
         
         if not allowed:

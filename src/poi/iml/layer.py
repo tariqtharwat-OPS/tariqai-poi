@@ -46,11 +46,19 @@ class IdentityMemoryLayer:
     def log_intent(self, intent_id, intent_data):
         self.logger.info(f"INTENT_RECEIVED | {intent_id} | {json.dumps(intent_data)}")
 
-    def validate_action(self, intent_type, context_signature, risk_level):
+    def validate_action(self, intent_type, context_signature, risk_level, action=None, params=None):
         """
         Consults the Constitution and past failures.
         IML CONSUMES risk_level from Strategic Thinker.
         """
+        # SAFE ZONE RULE (Phase 9.2)
+        # Allows for rapid iteration in non-critical log directories
+        if action == "file_write":
+            path = str(params.get("path", ""))
+            if path.replace("\\", "/").startswith("D:/TariqAI/logs/tmp/"):
+                self.logger.info(f"SAFE_ZONE_PASS | {action} to {path}")
+                return True, "Safe zone auto-approval", "ACT"
+
         # BOUNDARY CHECK: Critical risk always defaults to ASK
         if risk_level == "CRITICAL":
             self.logger.warning(f"CRITICAL_RISK_BLOCK | Intent: {intent_type}")

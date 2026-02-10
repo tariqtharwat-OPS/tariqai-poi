@@ -18,11 +18,12 @@ class POICore:
     Main Orchestrator for Phase 1.
     Coordinates ST, FE, and IML.
     """
-    def __init__(self):
+    def __init__(self, status_callback=None):
         self._setup_logging()
         self.iml = IdentityMemoryLayer()
         self.st = StrategicThinker(self.iml)
         self.fe = FastExecutor(self.iml)
+        self.status_callback = status_callback
         
         # Phase 2: Perception Layer
         self.perception = PerceptionLayer()
@@ -35,23 +36,25 @@ class POICore:
 
     def _setup_logging(self):
         self.logger = logging.getLogger("POI_Core")
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(levelname)s | %(name)s | %(message)s')
-        handler.setFormatter(formatter)
-        logging.getLogger().addHandler(handler)
-        logging.getLogger().setLevel(logging.INFO)
+        # Ensure no duplicate handlers if re-initialized
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter('%(levelname)s | %(name)s | %(message)s')
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.setLevel(logging.INFO)
 
     def handle_request(self, prompt):
         """
         Sense (Perception) -> Think (ST) -> Act (FE) -> Memory Write (IML)
         """
+        if self.status_callback: self.status_callback("Analyzing request...")
+        
         # 1. SENSE (New in Phase 2)
         perception_model = self.perception.capture_environment()
         
         # 2. THINK
         decision = self.st.process_intent(prompt, perception_model=perception_model)
-        print(f"\n[ST] Analyzing intent: {decision['intent_type']} (Risk: {decision['risk_level']})")
-        print(f"[CONTEXT] Perception saw: {len(perception_model.entities)} entities in {perception_model.active_window}")
         
         # 2. EXECUTE PLAN
         results = []
@@ -62,7 +65,11 @@ class POICore:
             "context_signature": decision["context_signature"]
         }
         
-        for step in decision["plan"]:
+        for i, step in enumerate(decision["plan"]):
+            action = step.get("action")
+            if self.status_callback: 
+                self.status_callback(f"Step {i+1}/{len(decision['plan'])}: {action}...")
+            
             # EXECUTION ATTEMPT
             res = self.fe.execute_step(step, context)
             
