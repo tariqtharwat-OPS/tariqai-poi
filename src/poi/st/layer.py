@@ -62,7 +62,13 @@ class StrategicThinker:
 
     def _classify_intent(self, prompt):
         p = prompt.lower()
-        if any(w in p for w in ["browser", "search", "open page", "visit", "website"]):
+        
+        # Phase 9.1 deterministic logic: URL + Save path = BROWSER
+        url = self._extract_url(prompt)
+        if url:
+            return "BROWSER"
+
+        if any(w in p for w in ["browser", "search", "open page", "visit", "website", "open http"]):
             return "BROWSER"
         if any(w in p for w in ["excel", "xlsx", "spreadsheet", "table"]):
             return "DOCUMENT_EXCEL"
@@ -109,12 +115,20 @@ class StrategicThinker:
         
         if intent_type == "BROWSER":
             url = self._extract_url(prompt) or "https://www.google.com"
-            params = {"url": url, "extract_content": True}
+            plan = [
+                {"action": "browser_open", "params": {"url": url}},
+                {"action": "browser_extract", "params": {"mode": "html"}}
+            ]
+            
+            # Additional step: Save to file if requested
             if "save" in p or "to" in p:
                 path = self._extract_path(prompt, skip_urls=True)
                 if path:
-                    params["save_path"] = path
-            return [{"action": "browser_open", "params": params}]
+                    # Deterministic check for extensions
+                    valid_ext = any(path.lower().endswith(ext) for ext in [".txt", ".html", ".md", ".json"])
+                    if valid_ext:
+                        plan.append({"action": "file_write", "params": {"path": path}})
+            return plan
 
         if intent_type == "DOCUMENT_WORD":
             path = self._extract_path(prompt) or "D:/TariqAI/logs/new_report.docx"

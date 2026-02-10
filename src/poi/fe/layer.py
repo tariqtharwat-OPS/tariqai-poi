@@ -14,6 +14,7 @@ class FastExecutor:
         self.iml = iml
         self.logger = logging.getLogger("FE_Layer")
         self.dry_run = os.environ.get("DRY_RUN") == "1"
+        self.last_content = None # Stateful extraction for multi-step plans
 
     def execute_step(self, step_data, context):
         """
@@ -24,7 +25,7 @@ class FastExecutor:
         params = step_data.get("params", {})
         
         # 0. DRY_RUN ENFORCEMENT
-        is_write_action = action in ["file_op", "file_create", "file_move", "file_copy", "file_delete", "word_create", "excel_create"]
+        is_write_action = action in ["file_op", "file_create", "file_move", "file_copy", "file_delete", "word_create", "excel_create", "file_write"]
         if self.dry_run and is_write_action:
             self.logger.info(f"DRY_RUN | Action '{action}' planned but NOT executed.")
             return {"status": "SUCCESS", "message": f"[DRY_RUN] Would have executed: {action}", "dry_run": True}
@@ -62,6 +63,14 @@ class FastExecutor:
                 with open(file_path, "a") as f:
                     f.write(params.get("content") + "\n")
                 return {"status": "SUCCESS", "message": f"Updated {params.get('path')}"}
+
+            if action == "file_write":
+                file_path = Path(params.get("path"))
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+                content = params.get("content") or self.last_content or ""
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+                return {"status": "SUCCESS", "message": f"Wrote to {params.get('path')}"}
 
             if action == "file_list":
                 p = Path(params.get("path", "."))
@@ -131,24 +140,26 @@ class FastExecutor:
             if action == "browser_open":
                 from playwright.sync_api import sync_playwright
                 url = params.get("url")
-                save_path = params.get("save_path")
                 
                 with sync_playwright() as pw:
                     browser = pw.chromium.launch(headless=True)
                     page = browser.new_page()
                     page.goto(url)
                     title = page.title()
-                    content = page.content() if params.get("extract_content") else ""
+                    # Pre-extract content and store in memory
+                    self.last_content = page.content()
                     browser.close()
-                    
-                    if save_path:
-                        p = Path(save_path)
-                        p.parent.mkdir(parents=True, exist_ok=True)
-                        with open(p, "w", encoding="utf-8") as f:
-                            f.write(content)
-                        self.logger.info(f"BROWSER | Content saved to {save_path}")
                         
-                    return {"status": "SUCCESS", "message": f"Opened {url}", "data": {"title": title, "content_len": len(content)}}
+                    return {"status": "SUCCESS", "message": f"Opened {url}", "data": {"title": title, "content_len": len(self.last_content)}}
+
+            if action == "browser_extract":
+                mode = params.get("mode", "html")
+                content = self.last_content or ""
+                if mode == "text":
+                    # Simple HTML to Text conversion (mocked for now)
+                    import re
+                    content = re.sub('<[^<]+?>', '', content)
+                return {"status": "SUCCESS", "message": f"Extracted {mode} content", "data": {"content_len": len(content)}}
 
             if action == "press_button":
                 # Phase 3 Controlled Execution

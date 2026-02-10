@@ -287,3 +287,29 @@
 2026-02-10 16:35:48,398 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
 2026-02-10 16:35:48,403 | POI_AUDIT | INFO | INTENT_RECEIVED | 48f65336 | {"intent_id": "48f65336", "intent_type": "FILE_OPERATION", "risk_level": "MEDIUM", "context_signature": "b0b3a1b2ad5e", "plan": [{"action": "file_create", "params": {"path": "D:\\TariqAI\\logs\\test_ph7\\dry_run_victim.txt"}}]}
 2026-02-10 16:35:48,426 | POI_AUDIT | INFO | ACTION_COMPLETED | 48f65336 | Status: COMPLETED
+2026-02-10 16:42:15,959 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-10 16:44:04,049 | POI_AUDIT | INFO | INTENT_RECEIVED | 13110cc6 | {"intent_id": "13110cc6", "intent_type": "DOCUMENT_WORD", "risk_level": "MEDIUM", "context_signature": "6ab37e7cd16b", "plan": [{"action": "word_create", "params": {"path": "D:\\TariqAI\\logs\\ui_test.docx", "title": "Tariq AI Automated Report", "bullets": ["Data point extracted from prompt"]}}]}
+2026-02-10 16:44:04,059 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | DOCUMENT_WORD::6ab37e7cd16b | 0/5
+2026-02-10 16:44:09,804 | POI_AUDIT | INFO | HUMAN_DECISION | gui_8d3c1725 | approve_once | Context: 6ab37e7cd16b
+2026-02-10 16:44:12,026 | POI_AUDIT | INFO | ACTION_COMPLETED | 13110cc6 | Status: COMPLETED
+2026-02-10 16:44:48,973 | POI_AUDIT | INFO | INTENT_RECEIVED | 308e0e9d | {"intent_id": "308e0e9d", "intent_type": "GENERAL_QUERY", "risk_level": "LOW", "context_signature": "e960655a58a4", "plan": [{"action": "press_button", "params": {"entity_id": "save_button", "label": "Save", "location": {"x": 500, "y": 10, "w": 40, "h": 20}}}]}
+2026-02-10 16:44:48,974 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | GENERAL_QUERY::e960655a58a4 | 0/5
+2026-02-10 16:44:51,128 | POI_AUDIT | INFO | HUMAN_DECISION | gui_ef9bac3f | approve_once | Context: e960655a58a4
+2026-02-10 16:44:51,155 | POI_AUDIT | INFO | ACTION_COMPLETED | 308e0e9d | Status: COMPLETED
+2026-02-10 16:45:19,947 | POI_AUDIT | INFO | INTENT_RECEIVED | 301f021e | {"intent_id": "301f021e", "intent_type": "DOCUMENT_WORD", "risk_level": "MEDIUM", "context_signature": "6ab37e7cd16b", "plan": [{"action": "word_create", "params": {"path": "D:\\TariqAI\\logs\\ui_test.docx", "title": "Tariq AI Automated Report", "bullets": ["Data point extracted from prompt"]}}]}
+2026-02-10 16:45:19,949 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | DOCUMENT_WORD::6ab37e7cd16b | 0/5
+2026-02-10 16:45:22,165 | POI_AUDIT | INFO | HUMAN_DECISION | gui_cb3e238c | approve_once | Context: 6ab37e7cd16b
+2026-02-10 16:45:22,231 | POI_AUDIT | INFO | ACTION_COMPLETED | 301f021e | Status: COMPLETED
+2026-02-10 16:51:34,295 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-10 16:51:34,344 | POI_AUDIT | INFO | INTENT_RECEIVED | ccd01ef1 | {"intent_id": "ccd01ef1", "intent_type": "BROWSER", "risk_level": "LOW", "context_signature": "c98d7a1ea8cf", "plan": [{"action": "browser_open", "params": {"url": "https://example.com"}}, {"action": "browser_extract", "params": {"mode": "html"}}, {"action": "file_write", "params": {"path": "D:/TariqAI/logs/example_gui.html"}}]}
+2026-02-10 16:51:34,344 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-10 16:51:34,344 | POI_AUDIT | INFO | INTENT_RECEIVED | 813d2e49 | {"intent_id": "813d2e49", "intent_type": "BROWSER", "risk_level": "LOW", "context_signature": "c98d7a1ea8cf", "plan": [{"action": "browser_open", "params": {"url": "https://example.com"}}, {"action": "browser_extract", "params": {"mode": "html"}}]}
+2026-02-10 16:51:51,461 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-10 16:51:51,472 | POI_AUDIT | INFO | INTENT_RECEIVED | 3d9c6b1c | {"intent_id": "3d9c6b1c", "intent_type": "BROWSER", "risk_level": "LOW", "context_signature": "c98d7a1ea8cf", "plan": [{"action": "browser_open", "params": {"url": "https://example.com"}}, {"action": "browser_extract", "params": {"mode": "html"}}, {"action": "file_write", "params": {"path": "D:/TariqAI/logs/example_gui.html"}}]}
+2026-02-10 16:51:51,474 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | BROWSER::c98d7a1ea8cf | 0/5
+2026-02-10 16:51:51,500 | POI_AUDIT | INFO | HUMAN_DECISION | acceptance_9_1 | approve_once | Context: c98d7a1ea8cf
+2026-02-10 16:51:59,730 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | BROWSER::c98d7a1ea8cf | 0/5
+2026-02-10 16:51:59,754 | POI_AUDIT | INFO | HUMAN_DECISION | acceptance_9_1 | approve_once | Context: c98d7a1ea8cf
+2026-02-10 16:51:59,755 | POI_AUDIT | INFO | TRUST_INSUFFICIENT | BROWSER::c98d7a1ea8cf | 0/5
+2026-02-10 16:51:59,782 | POI_AUDIT | INFO | HUMAN_DECISION | acceptance_9_1 | approve_once | Context: c98d7a1ea8cf
+2026-02-10 16:51:59,799 | POI_AUDIT | INFO | ACTION_COMPLETED | 3d9c6b1c | Status: COMPLETED
