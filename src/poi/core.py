@@ -25,6 +25,10 @@ class POICore:
         self.fe = FastExecutor(self.iml)
         self.status_callback = status_callback
         
+        # Phase 10.2 Research Module
+        from poi.research.howto import HowToResearch
+        self.research = HowToResearch(self.fe)
+        
         # Phase 2: Perception Layer
         self.perception = PerceptionLayer()
         self.perception.add_adapter(DesktopAdapter())
@@ -32,7 +36,7 @@ class POICore:
         # Phase 4: Interface Layer
         self.interface = ConfirmationManager(self.iml)
         
-        logger.info("Tariq POI Core Initialized @ Phase 4")
+        logger.info("Tariq POI Core Initialized @ Phase 10.2")
 
     def _setup_logging(self):
         self.logger = logging.getLogger("POI_Core")
@@ -46,17 +50,25 @@ class POICore:
 
     def handle_request(self, prompt):
         """
-        Sense (Perception) -> Think (ST) -> Act (FE) -> Memory Write (IML)
+        Universal Flow: UNDERSTAND -> RESEARCH -> PLAN -> EXECUTE
         """
         if self.status_callback: self.status_callback("Analyzing request...")
         
-        # 1. SENSE (New in Phase 2)
+        # 1. SENSE
         perception_model = self.perception.capture_environment()
         
-        # 2. THINK
-        decision = self.st.process_intent(prompt, perception_model=perception_model)
+        # 2. THINK (Decomposition & Routing)
+        intent_type, decision = self.st.get_intent(prompt, perception_model=perception_model)
         
-        # 2. EXECUTE PLAN
+        # Handle Clarification
+        if intent_type == "CLARIFY":
+            question = decision.get("question")
+            self.logger.info(f"CLARIFY | Asking: {question}")
+            if self.status_callback: self.status_callback("Need more info...")
+            # In a real UI this would wait for input. For now, we print it.
+            return {"status": "CLARIFICATION_REQUIRED", "message": question}
+
+        # 3. RESEARCH & EXECUTE
         results = []
         context = {
             "prompt": prompt,
@@ -67,10 +79,19 @@ class POICore:
         
         for i, step in enumerate(decision["plan"]):
             action = step.get("action")
+            params = step.get("params", {})
+            
             if self.status_callback: 
                 self.status_callback(f"Step {i+1}/{len(decision['plan'])}: {action}...")
             
-            # EXECUTION ATTEMPT
+            # ORCHESTRATION: Special handling for Research
+            if action == "research_howto":
+                self.logger.info(f"CORE | Triggering research for: {params.get('query')}")
+                res = self.research.research_task(params.get("query"))
+                results.append(res)
+                continue
+
+            # EXECUTION ATTEMPT via Fast Executor
             res = self.fe.execute_step(step, context)
             
             # GOVERNANCE BLOCK -> Escalation
