@@ -121,6 +121,13 @@ class StrategicThinker:
         if any(w in p for w in ["قائمة", "استعراض"]): return "FILE_NAVIGATION"
         if any(w in p for w in ["انقل", "انسخ", "انشئ"]): return "FILE_OPERATION"
 
+        # Phase 11 Desktop MVP
+        if any(w in p for w in ["notepad", "windows", "desktop", "click", "type"]):
+            return "DESKTOP_TASK"
+        
+        if "delete" in p and "gmail" in p:
+            return "GMAIL_DELETE"
+
         # Deterministic Tool Selection based on entities (URL, extensions)
         url = self._extract_url(prompt)
         if url: return "BROWSER"
@@ -141,6 +148,7 @@ class StrategicThinker:
             return "FILE_NAVIGATION"
         if any(w in p for w in ["rename", "move", "copy", "create", "make folder", "setup"]):
             return "FILE_OPERATION"
+
         return "GENERAL_QUERY"
 
     def _assess_risk(self, prompt):
@@ -176,6 +184,7 @@ class StrategicThinker:
             # For simplicity, let's have Core handle the orchestration of Research module
             plan.append({"action": "research_howto", "params": {"query": prompt}})
 
+        
         if intent_type == "BROWSER":
             url = self._extract_url(prompt) or "https://www.google.com"
             plan.extend([
@@ -223,7 +232,23 @@ class StrategicThinker:
             elif "copy" in p or "انسخ" in p:
                 if len(paths) >= 2:
                     plan.append({"action": "file_copy", "params": {"src": paths[0], "dst": paths[1]}})
+
+        elif intent_type == "DESKTOP_TASK":
+            if "notepad" in p:
+                plan.extend([
+                    {"action": "desktop_hotkey", "params": {"keys": ["{Win}", "r"]}},
+                    {"action": "desktop_type", "params": {"text": "notepad{Enter}"}},
+                    {"action": "desktop_focus", "params": {"window_name": "Notepad"}},
+                    {"action": "desktop_type", "params": {"text": "Tariq AI Desktop MVP\nLine 1\nLine 2\nLine 3"}},
+                    {"action": "desktop_hotkey", "params": {"keys": ["{Ctrl}", "s"]}},
+                    {"action": "desktop_type", "params": {"text": "D:\\TariqAI\\logs\\tmp\\notepad_test.txt{Enter}"}}
+                ])
         
+        elif intent_type == "GMAIL_DELETE":
+             # Blocked by IML, but we can generate a safe assist plan here if needed
+             # For Phase 11, the goal is to show it's blocked.
+             plan.append({"action": "chat", "params": {"message": "I am prohibited from deleting emails. I can help you set up filters instead."}})
+
         if not plan:
             plan = [{"action": "chat", "params": {"message": f"I understand your request for {prompt}. How should I proceed?"}}]
             

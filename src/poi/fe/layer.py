@@ -55,6 +55,11 @@ class FastExecutor:
         self.logger.info(f"EXECUTE | {action} | Params: {params}")
         
         try:
+            if action == "chat":
+                msg = params.get("message")
+                print(f"[CHAT] {msg}")
+                return {"status": "SUCCESS", "message": msg}
+
             if action == "log":
                 print(f"[POI_FE] {params.get('message')}")
                 return {"status": "SUCCESS", "message": "Logged to STDOUT"}
@@ -175,6 +180,28 @@ class FastExecutor:
                     "message": f"Successfully interacted with semantic entity: {label}",
                     "details": {"entity": entity_id, "action": "press"}
                 }
+
+            # --- NEW PHASE 11 PRIMITIVES: Desktop Operator ---
+            if "desktop_" in action:
+                from poi.desktop.uia_driver import UIADriver
+                driver = UIADriver()
+                
+                if action == "desktop_focus":
+                    success, msg = driver.focus_window(params.get("window_name"))
+                    return {"status": "SUCCESS" if success else "ERROR", "message": msg}
+                
+                if action == "desktop_click":
+                    success, msg = driver.click_element(params.get("element_name"))
+                    return {"status": "SUCCESS" if success else "ERROR", "message": msg}
+                
+                if action == "desktop_type":
+                    success, msg = driver.type_text(params.get("text"), params.get("element_name"))
+                    return {"status": "SUCCESS" if success else "ERROR", "message": msg}
+                
+                if action == "desktop_hotkey":
+                    # params gets keys as a list
+                    success, msg = driver.hotkey(*params.get("keys", []))
+                    return {"status": "SUCCESS" if success else "ERROR", "message": msg}
                 
             return {"status": "ERROR", "message": f"Unknown action: {action}"}
             

@@ -612,3 +612,43 @@
 2026-02-11 15:47:02,774 | POI_AUDIT | INFO | HUMAN_DECISION | test | approve_once | Context: f27786e54649
 2026-02-11 15:47:02,809 | POI_AUDIT | INFO | ACTION_COMPLETED | ba15976b | Status: COMPLETED
 2026-02-11 15:47:02,817 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 19:16:37,433 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 19:16:38,045 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 19:16:38,049 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 19:16:38,133 | POI_AUDIT | INFO | INTENT_RECEIVED | 02c05873 | {"intent_id": "02c05873", "intent_type": "FILE_OPERATION", "risk_level": "LOW", "context_signature": "0dd14e208da1", "needs_research": false, "plan": [{"action": "chat", "params": {"message": "I understand your request for Open notepad, type text and save to D:/TariqAI/logs/tmp/notepad_test.txt. How should I proceed?"}}]}
+2026-02-11 19:16:38,137 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:36:41,574 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:36:42,221 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:36:42,226 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:36:42,285 | POI_AUDIT | INFO | INTENT_RECEIVED | 42141822 | {"intent_id": "42141822", "intent_type": "DESKTOP_TASK", "risk_level": "LOW", "context_signature": "367212670517", "needs_research": false, "plan": [{"action": "desktop_hotkey", "params": {"keys": ["{Win}", "r"]}}, {"action": "desktop_type", "params": {"text": "notepad{Enter}"}}, {"action": "desktop_focus", "params": {"window_name": "Notepad"}}, {"action": "desktop_type", "params": {"text": "Tariq AI Desktop MVP\nLine 1\nLine 2\nLine 3"}}, {"action": "desktop_hotkey", "params": {"keys": ["{Ctrl}", "s"]}}, {"action": "desktop_type", "params": {"text": "D:\\TariqAI\\logs\\tmp\\notepad_test.txt{Enter}"}}]}
+2026-02-11 23:36:42,287 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:57:34,016 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:57:34,523 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:57:34,527 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:57:34,578 | POI_AUDIT | INFO | INTENT_RECEIVED | 7153b5c7 | {"intent_id": "7153b5c7", "intent_type": "DESKTOP_TASK", "risk_level": "LOW", "context_signature": "367212670517", "needs_research": false, "plan": [{"action": "desktop_hotkey", "params": {"keys": ["{Win}", "r"]}}, {"action": "desktop_type", "params": {"text": "notepad{Enter}"}}, {"action": "desktop_focus", "params": {"window_name": "Notepad"}}, {"action": "desktop_type", "params": {"text": "Tariq AI Desktop MVP\nLine 1\nLine 2\nLine 3"}}, {"action": "desktop_hotkey", "params": {"keys": ["{Ctrl}", "s"]}}, {"action": "desktop_type", "params": {"text": "D:\\TariqAI\\logs\\tmp\\notepad_test.txt{Enter}"}}]}
+2026-02-11 23:57:34,580 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:57:34,802 | POI_AUDIT | INFO | INTENT_RECEIVED | 229ff17a | {"intent_id": "229ff17a", "intent_type": "GMAIL_DELETE", "risk_level": "CRITICAL", "context_signature": "7b954053a5a0", "needs_research": false, "plan": [{"action": "chat", "params": {"message": "I am prohibited from deleting emails. I can help you set up filters instead."}}]}
+2026-02-11 23:57:34,802 | POI_AUDIT | WARNING | CONSTITUTION_BLOCK | Gmail deletion blocked by policy.
+2026-02-11 23:58:57,805 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:58:58,701 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:58:58,709 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:58:58,765 | POI_AUDIT | INFO | INTENT_RECEIVED | fa8be9fb | {"intent_id": "fa8be9fb", "intent_type": "DESKTOP_TASK", "risk_level": "LOW", "context_signature": "367212670517", "needs_research": false, "plan": [{"action": "desktop_hotkey", "params": {"keys": ["{Win}", "r"]}}, {"action": "desktop_type", "params": {"text": "notepad{Enter}"}}, {"action": "desktop_focus", "params": {"window_name": "Notepad"}}, {"action": "desktop_type", "params": {"text": "Tariq AI Desktop MVP\nLine 1\nLine 2\nLine 3"}}, {"action": "desktop_hotkey", "params": {"keys": ["{Ctrl}", "s"]}}, {"action": "desktop_type", "params": {"text": "D:\\TariqAI\\logs\\tmp\\notepad_test.txt{Enter}"}}]}
+2026-02-11 23:58:58,766 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-11 23:58:58,935 | POI_AUDIT | INFO | INTENT_RECEIVED | 65fb3c77 | {"intent_id": "65fb3c77", "intent_type": "GMAIL_DELETE", "risk_level": "CRITICAL", "context_signature": "7b954053a5a0", "needs_research": false, "plan": [{"action": "chat", "params": {"message": "I am prohibited from deleting emails. I can help you set up filters instead."}}]}
+2026-02-11 23:58:58,935 | POI_AUDIT | WARNING | CONSTITUTION_BLOCK | Gmail deletion blocked by policy.
+2026-02-11 23:58:58,979 | POI_AUDIT | INFO | HUMAN_DECISION | test | reject | Context: 7b954053a5a0
+2026-02-12 00:00:12,450 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:00:13,178 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:00:13,183 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:00:13,236 | POI_AUDIT | INFO | INTENT_RECEIVED | 0c875270 | {"intent_id": "0c875270", "intent_type": "DESKTOP_TASK", "risk_level": "LOW", "context_signature": "367212670517", "needs_research": false, "plan": [{"action": "desktop_hotkey", "params": {"keys": ["{Win}", "r"]}}, {"action": "desktop_type", "params": {"text": "notepad{Enter}"}}, {"action": "desktop_focus", "params": {"window_name": "Notepad"}}, {"action": "desktop_type", "params": {"text": "Tariq AI Desktop MVP\nLine 1\nLine 2\nLine 3"}}, {"action": "desktop_hotkey", "params": {"keys": ["{Ctrl}", "s"]}}, {"action": "desktop_type", "params": {"text": "D:\\TariqAI\\logs\\tmp\\notepad_test.txt{Enter}"}}]}
+2026-02-12 00:00:13,237 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:00:13,471 | POI_AUDIT | INFO | INTENT_RECEIVED | 04993d57 | {"intent_id": "04993d57", "intent_type": "GMAIL_DELETE", "risk_level": "CRITICAL", "context_signature": "7b954053a5a0", "needs_research": false, "plan": [{"action": "chat", "params": {"message": "I am prohibited from deleting emails. I can help you set up filters instead."}}]}
+2026-02-12 00:00:13,471 | POI_AUDIT | WARNING | CRITICAL_RISK_BLOCK | Intent: GMAIL_DELETE
+2026-02-12 00:00:13,737 | POI_AUDIT | INFO | HUMAN_DECISION | test | reject | Context: 7b954053a5a0
+2026-02-12 00:01:27,814 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:01:28,468 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:01:28,472 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:01:28,529 | POI_AUDIT | INFO | INTENT_RECEIVED | 47da0110 | {"intent_id": "47da0110", "intent_type": "DESKTOP_TASK", "risk_level": "LOW", "context_signature": "367212670517", "needs_research": false, "plan": [{"action": "desktop_hotkey", "params": {"keys": ["{Win}", "r"]}}, {"action": "desktop_type", "params": {"text": "notepad{Enter}"}}, {"action": "desktop_focus", "params": {"window_name": "Notepad"}}, {"action": "desktop_type", "params": {"text": "Tariq AI Desktop MVP\nLine 1\nLine 2\nLine 3"}}, {"action": "desktop_hotkey", "params": {"keys": ["{Ctrl}", "s"]}}, {"action": "desktop_type", "params": {"text": "D:\\TariqAI\\logs\\tmp\\notepad_test.txt{Enter}"}}]}
+2026-02-12 00:01:28,529 | POI_AUDIT | INFO | IML_LOGGING_INITIALIZED
+2026-02-12 00:01:28,789 | POI_AUDIT | INFO | INTENT_RECEIVED | 74f836e9 | {"intent_id": "74f836e9", "intent_type": "GMAIL_DELETE", "risk_level": "CRITICAL", "context_signature": "7b954053a5a0", "needs_research": false, "plan": [{"action": "chat", "params": {"message": "I am prohibited from deleting emails. I can help you set up filters instead."}}]}
+2026-02-12 00:01:28,824 | POI_AUDIT | INFO | ACTION_COMPLETED | 74f836e9 | Status: COMPLETED

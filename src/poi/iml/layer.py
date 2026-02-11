@@ -59,6 +59,22 @@ class IdentityMemoryLayer:
                 self.logger.info(f"SAFE_ZONE_PASS | {action} to {path}")
                 return True, "Safe zone auto-approval", "ACT"
 
+        if action in ["chat", "log"]:
+            return True, "Informational action auto-approval", "ACT"
+
+        # BOUNDARY CHECK: Desktop Safety (Phase 11)
+        if action and "desktop_" in action:
+            # Block destructive UI labels
+            p_lower = str(params or {}).lower()
+            if any(w in p_lower for w in ["delete", "remove", "wipe", "format", "login", "signin", "send"]):
+                 self.logger.warning(f"DESKTOP_SAFETY_BLOCK | Destructive label in: {action}")
+                 return False, f"Destructive desktop action '{action}' blocked for safety.", "BLOCK"
+
+        # Gmail Safety Example
+        if intent_type == "GMAIL_DELETE" and action not in ["chat", "log"]:
+             self.logger.warning(f"CONSTITUTION_BLOCK | Gmail deletion blocked by policy.")
+             return False, "Deletion in Gmail is blocked. Suggested: Use Safe Assist for filters.", "BLOCK"
+
         # BOUNDARY CHECK: Critical risk always defaults to ASK
         if risk_level == "CRITICAL":
             self.logger.warning(f"CRITICAL_RISK_BLOCK | Intent: {intent_type}")
