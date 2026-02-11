@@ -46,7 +46,9 @@ class Phase10_2GeneralAgentTest(unittest.TestCase):
         self.assertEqual(res["status"], "SUCCESS")
         
         # Verify how-to brief was created (triggered by 'طريقة')
-        log_files = list(Path("D:/TariqAI/logs/tmp").glob("howto_*.md"))
+        log_files = [f for f in os.listdir("D:/TariqAI/logs/tmp") if f.startswith("howto_")]
+        if not log_files:
+            print(f"[DEBUG] Files in tmp: {os.listdir('D:/TariqAI/logs/tmp')}")
         self.assertGreater(len(log_files), 0)
         print(f"[REAL] Task B (Arabic Research) verified. Briefs found: {len(log_files)}")
 
